@@ -1,0 +1,284 @@
+/* Button Component Styles */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Button Sizes */
+.sm {
+  height: 2rem;
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.md {
+  height: 2.5rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.lg {
+  height: 3rem;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+}
+
+.xl {
+  height: 3.5rem;
+  padding: 0 2rem;
+  font-size: 1.125rem;
+}
+
+/* Button Variants */
+.primary {
+  background: linear-gradient(135deg, #3B5BFF 0%, #5E87FF 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(59, 91, 255, 0.3);
+}
+
+.primary:hover:not(.disabled) {
+  background: linear-gradient(135deg, #2640F5 0%, #3B5BFF 100%);
+  box-shadow: 0 6px 20px rgba(59, 91, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.primary:active:not(.disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(59, 91, 255, 0.3);
+}
+
+.secondary {
+  background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.secondary:hover:not(.disabled) {
+  background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+}
+
+.accent {
+  background: linear-gradient(135deg, #F97316 0%, #FB923C 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+}
+
+.accent:hover:not(.disabled) {
+  background: linear-gradient(135deg, #EA580C 0%, #F97316 100%);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+  transform: translateY(-1px);
+}
+
+.outline {
+  background: transparent;
+  color: #3B5BFF;
+  border: 2px solid #3B5BFF;
+  box-shadow: none;
+}
+
+.outline:hover:not(.disabled) {
+  background: #3B5BFF;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(59, 91, 255, 0.2);
+}
+
+.ghost {
+  background: transparent;
+  color: #44403C;
+  box-shadow: none;
+}
+
+.ghost:hover:not(.disabled) {
+  background: #F5F5F4;
+  color: #1C1917;
+}
+
+.danger {
+  background: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+.danger:hover:not(.disabled) {
+  background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Button States */
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.loading .content {
+  opacity: 0.7;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* Icons */
+.leftIcon,
+.rightIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+}
+
+.leftIcon {
+  margin-right: -0.25rem;
+}
+
+.rightIcon {
+  margin-left: -0.25rem;
+}
+
+/* Loading Spinner */
+.spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1em;
+  height: 1em;
+}
+
+.spinnerSvg {
+  width: 100%;
+  height: 100%;
+  animation: spin 1s linear infinite;
+}
+
+.spinnerCircle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-dasharray: 62.83;
+  stroke-dashoffset: 62.83;
+  stroke-linecap: round;
+  animation: spinnerDash 1.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinnerDash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+
+/* Focus Styles */
+.button:focus-visible {
+  outline: 2px solid #3B5BFF;
+  outline-offset: 2px;
+}
+
+/* Ripple Effect */
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  transform: scale(0);
+  transition: transform 0.3s ease-out;
+  pointer-events: none;
+}
+
+.button:active:not(.disabled)::before {
+  transform: scale(1);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .button {
+    min-height: 44px; /* iOS recommended touch target */
+    font-size: 1rem;
+  }
+  
+  .sm {
+    height: 2.25rem;
+    font-size: 0.875rem;
+  }
+  
+  .md {
+    height: 2.75rem;
+    font-size: 1rem;
+  }
+  
+  .lg {
+    height: 3.25rem;
+    font-size: 1.125rem;
+  }
+  
+  .xl {
+    height: 3.75rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ghost {
+    color: #D6D3D1;
+  }
+  
+  .ghost:hover:not(.disabled) {
+    background: #44403C;
+    color: #F5F5F4;
+  }
+  
+  .outline {
+    border-color: #91B1FF;
+    color: #91B1FF;
+  }
+  
+  .outline:hover:not(.disabled) {
+    background: #91B1FF;
+    color: #1C1917;
+  }
+}

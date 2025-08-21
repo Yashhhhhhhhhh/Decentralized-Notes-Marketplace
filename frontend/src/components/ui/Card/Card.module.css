@@ -1,0 +1,249 @@
+/* Card Component Styles */
+.card {
+  background: white;
+  border-radius: 1rem;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Variants */
+.default {
+  background: white;
+  border: 1px solid #E7E5E4;
+}
+
+.elevated {
+  background: white;
+}
+
+.outlined {
+  background: white;
+  border: 2px solid #D6D3D1;
+}
+
+.filled {
+  background: #F5F5F4;
+  border: 1px solid #E7E5E4;
+}
+
+.gradient {
+  background: linear-gradient(135deg, #EEF4FF 0%, #F0F9FF 100%);
+  border: 1px solid rgba(59, 91, 255, 0.1);
+}
+
+/* Padding Variants */
+.padding-none {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: 1rem;
+}
+
+.padding-md {
+  padding: 1.5rem;
+}
+
+.padding-lg {
+  padding: 2rem;
+}
+
+.padding-xl {
+  padding: 2.5rem;
+}
+
+/* Shadow Variants */
+.shadow-none {
+  box-shadow: none;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Hover Effects */
+.hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+}
+
+.clickable {
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+}
+
+.clickable:focus-visible {
+  outline: 2px solid #3B5BFF;
+  outline-offset: 2px;
+}
+
+.clickable:active {
+  transform: scale(0.98);
+}
+
+/* Border */
+.border {
+  border: 2px solid #E7E5E4;
+}
+
+/* Card Sections */
+.header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #E7E5E4;
+  margin-bottom: 1rem;
+}
+
+.body {
+  flex: 1;
+}
+
+.footer {
+  padding-top: 1rem;
+  border-top: 1px solid #E7E5E4;
+  margin-top: 1rem;
+}
+
+/* Special Effects */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3B5BFF, #10B981, #F97316);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Note Card Specific Styles */
+.noteCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.noteCard::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-top: 20px solid #3B5BFF;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.noteCard:hover::after {
+  opacity: 0.1;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .card {
+    border-radius: 0.75rem;
+  }
+  
+  .padding-sm {
+    padding: 0.75rem;
+  }
+  
+  .padding-md {
+    padding: 1rem;
+  }
+  
+  .padding-lg {
+    padding: 1.25rem;
+  }
+  
+  .padding-xl {
+    padding: 1.5rem;
+  }
+  
+  .hover:hover {
+    transform: none; /* Disable hover effects on mobile */
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .default,
+  .elevated,
+  .outlined,
+  .filled {
+    background: #292524;
+    border-color: #44403C;
+    color: #F5F5F4;
+  }
+  
+  .filled {
+    background: #1C1917;
+  }
+  
+  .gradient {
+    background: linear-gradient(135deg, #1E268F 0%, #064E3B 100%);
+    border-color: rgba(59, 91, 255, 0.2);
+  }
+  
+  .header,
+  .footer {
+    border-color: #44403C;
+  }
+}
+
+/* Loading State */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .hover,
+  .clickable {
+    transition: none;
+  }
+  
+  .loading::after {
+    animation: none;
+  }
+}

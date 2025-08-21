@@ -1,0 +1,370 @@
+/* Input Component Styles */
+.container {
+  position: relative;
+  width: 100%;
+}
+
+/* Input Wrapper */
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Base Input Styles */
+.input {
+  width: 100%;
+  background: white;
+  border: 2px solid #D6D3D1;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  color: #1C1917;
+}
+
+.input::placeholder {
+  color: #A8A29E;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Input Sizes */
+.sm .input {
+  height: 2.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.md .input {
+  height: 2.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+.lg .input {
+  height: 3.25rem;
+  padding: 1rem 1.25rem;
+  font-size: 1.125rem;
+}
+
+/* Input Variants */
+.default .input {
+  border-color: #D6D3D1;
+  background: white;
+}
+
+.filled .input {
+  background: #F5F5F4;
+  border-color: transparent;
+}
+
+.outline .input {
+  background: transparent;
+  border-color: #D6D3D1;
+}
+
+/* Input States */
+.input:focus {
+  border-color: #3B5BFF;
+  box-shadow: 0 0 0 3px rgba(59, 91, 255, 0.1);
+}
+
+.focused .input::placeholder {
+  opacity: 0.5;
+}
+
+.filled .input,
+.focused .input {
+  border-color: #3B5BFF;
+}
+
+.error .input {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.disabled .input {
+  background: #F5F5F4;
+  border-color: #E7E5E4;
+  color: #A8A29E;
+  cursor: not-allowed;
+}
+
+.disabled .input::placeholder {
+  color: #D6D3D1;
+}
+
+/* Label Styles */
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #44403C;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.focused .label,
+.filled .label {
+  color: #3B5BFF;
+  font-weight: 600;
+}
+
+.error .label {
+  color: #EF4444;
+}
+
+.disabled .label {
+  color: #A8A29E;
+  cursor: not-allowed;
+}
+
+.required {
+  color: #EF4444;
+  margin-left: 0.25rem;
+}
+
+/* Floating Label Variant */
+.floating {
+  position: relative;
+}
+
+.floating .label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0 0.25rem;
+  margin: 0;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+  z-index: 1;
+}
+
+.floating.focused .label,
+.floating.filled .label {
+  top: 0;
+  font-size: 0.75rem;
+  transform: translateY(-50%);
+}
+
+.floating .input {
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Icon Styles */
+.leftIcon,
+.rightIcon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #A8A29E;
+  pointer-events: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.leftIcon {
+  left: 1rem;
+}
+
+.rightIcon {
+  right: 1rem;
+}
+
+.leftIcon + .input {
+  padding-left: 2.5rem;
+}
+
+.input + .rightIcon,
+.rightIcon {
+  padding-right: 2.5rem;
+}
+
+.sm .leftIcon,
+.sm .rightIcon {
+  font-size: 0.875rem;
+}
+
+.sm .leftIcon {
+  left: 0.75rem;
+}
+
+.sm .rightIcon {
+  right: 0.75rem;
+}
+
+.sm .leftIcon + .input {
+  padding-left: 2rem;
+}
+
+.sm .input + .rightIcon {
+  padding-right: 2rem;
+}
+
+.lg .leftIcon,
+.lg .rightIcon {
+  font-size: 1.25rem;
+}
+
+.lg .leftIcon {
+  left: 1.25rem;
+}
+
+.lg .rightIcon {
+  right: 1.25rem;
+}
+
+.lg .leftIcon + .input {
+  padding-left: 3rem;
+}
+
+.lg .input + .rightIcon {
+  padding-right: 3rem;
+}
+
+.focused .leftIcon,
+.focused .rightIcon {
+  color: #3B5BFF;
+}
+
+.error .leftIcon,
+.error .rightIcon {
+  color: #EF4444;
+}
+
+/* Helper and Error Text */
+.helperText,
+.errorText {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.helperText {
+  color: #78716C;
+}
+
+.errorText {
+  color: #EF4444;
+  font-weight: 500;
+}
+
+/* Focus Ring for Accessibility */
+.input:focus-visible {
+  outline: 2px solid #3B5BFF;
+  outline-offset: 2px;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .sm .input {
+    height: 2.5rem;
+    font-size: 1rem; /* Prevent zoom on iOS */
+  }
+  
+  .md .input {
+    height: 3rem;
+    font-size: 1rem;
+  }
+  
+  .lg .input {
+    height: 3.5rem;
+    font-size: 1.125rem;
+  }
+  
+  .input {
+    font-size: 1rem; /* Prevent zoom on iOS */
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .input {
+    background: #292524;
+    border-color: #44403C;
+    color: #F5F5F4;
+  }
+  
+  .input::placeholder {
+    color: #78716C;
+  }
+  
+  .filled .input {
+    background: #1C1917;
+  }
+  
+  .label {
+    color: #D6D3D1;
+  }
+  
+  .helperText {
+    color: #A8A29E;
+  }
+  
+  .disabled .input {
+    background: #1C1917;
+    border-color: #292524;
+    color: #78716C;
+  }
+  
+  .floating .label {
+    background: #292524;
+  }
+}
+
+/* Animation for better UX */
+.input:invalid {
+  box-shadow: none; /* Remove default browser validation styling */
+}
+
+.container {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Validation States */
+.success .input {
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.success .label {
+  color: #10B981;
+}
+
+.success .leftIcon,
+.success .rightIcon {
+  color: #10B981;
+}
+
+.warning .input {
+  border-color: #F59E0B;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.warning .label {
+  color: #F59E0B;
+}
+
+.warning .leftIcon,
+.warning .rightIcon {
+  color: #F59E0B;
+}

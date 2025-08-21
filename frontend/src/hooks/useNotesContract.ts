@@ -5,8 +5,8 @@ import { Note, ContractState } from '../types';
 
 // You'll need to replace this with your actual contract ABI
 const CONTRACT_ABI = [
-  // Add your contract ABI here after deployment
-  "function createNote(string memory title, string memory description, string memory ipfsHash, uint256 price, string memory subject) external returns (uint256)",
+  // Updated to match your deployed contract
+  "function createNote(string memory title, string memory description, string memory ipfsHash, uint256 price, string memory subject, string memory metadataURI) external returns (uint256)",
   "function purchaseNote(uint256 tokenId) external payable",
   "function rateNote(uint256 tokenId, uint8 rating) external",
   "function updatePrice(uint256 tokenId, uint256 newPrice) external",
@@ -84,13 +84,25 @@ export function useNotesContract() {
     try {
       const priceInWei = ethers.parseEther(price);
       
-      // Estimate gas
+      // Create metadata URI for the 6th parameter
+      const metadata = {
+        title,
+        description,
+        subject,
+        ipfsHash,
+        createdAt: new Date().toISOString(),
+        creator: web3State.account
+      };
+      const metadataURI = `data:application/json;base64,${btoa(JSON.stringify(metadata))}`;
+      
+      // Estimate gas with all 6 parameters
       const gasEstimate = await contractState.contract.createNote.estimateGas(
         title,
         description,
         ipfsHash,
         priceInWei,
-        subject
+        subject,
+        metadataURI
       );
 
       // Add 20% buffer to gas estimate
@@ -102,6 +114,7 @@ export function useNotesContract() {
         ipfsHash,
         priceInWei,
         subject,
+        metadataURI,
         { gasLimit }
       );
 
@@ -132,7 +145,7 @@ export function useNotesContract() {
       }
       throw error;
     }
-  }, [contractState.contract, addTransaction, updateTransaction]);
+  }, [contractState.contract, addTransaction, updateTransaction, web3State.account]);
 
   const purchaseNote = useCallback(async (tokenId: number, price: string) => {
     if (!contractState.contract) {

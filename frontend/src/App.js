@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Web3Provider, useWeb3 } from './contexts/Web3Context';
 import { useNotesContract } from './hooks/useNotesContract';
+
+// New refactored components
+import Layout from './components/layout/Layout';
+import Navigation from './components/layout/Navigation';
+import BrowsePage from './pages/BrowsePage';
+import CreatePage from './pages/CreatePage';
+
+// Legacy components (to be refactored)
 import NotesMarketplace from './components/NotesMarketplace';
 import CreateNoteForm from './components/CreateNoteForm';
 import UserProfile from './components/UserProfile';
@@ -13,8 +21,10 @@ import PinataDebugUploader from './components/PinataDebugUploader';
 import EnvTester from './components/EnvTester';
 import NetworkSelector from './components/NetworkSelector';
 import ContractTestComponent from './ContractTestComponent';
+import CreateNoteTestComponent from './components/CreateNoteTestComponent';
+
 import { getCurrentNetwork, getContractAddress } from './config/networks';
-import './App.css';
+import './styles/global.css';
 
 // Demo Components
 function WalletConnection() {
@@ -354,10 +364,11 @@ function PinataSetup() {
 }
 
 function DemoApp() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('browse');
   const [searchFilters, setSearchFilters] = useState({});
   const [notifications, setNotifications] = useState([]);
-  const { state } = useWeb3();
+  const { state, connectWallet } = useWeb3();
+  const { contract } = useNotesContract();
 
   const addNotification = (notification) => {
     const id = Date.now();
@@ -375,22 +386,29 @@ function DemoApp() {
     });
   };
 
-  const navigation = [
-    { id: 'home', label: '🏠 Home', icon: '🏠' },
-    { id: 'test', label: '🧪 Contract Test', icon: '🧪' },
-    { id: 'marketplace', label: '🛒 Marketplace', icon: '🛒' },
-    { id: 'create', label: '📝 Create Note', icon: '📝' },
-    { id: 'ipfs', label: '📁 Files', icon: '📁' },
-    { id: 'profile', label: '👤 Profile', icon: '👤', requiresWallet: true },
-    { id: 'admin', label: '🛡️ Admin', icon: '🛡️', requiresWallet: true, adminOnly: true }
-  ];
-
   const isAdmin = state.account?.toLowerCase() === process.env.REACT_APP_ADMIN_ADDRESS?.toLowerCase();
+
+  const handleConnectWallet = () => {
+    if (!state.isConnected) {
+      connectWallet();
+    }
+  };
 
   const renderCurrentPage = () => {
     switch (currentPage) {
+      case 'browse':
+        return <BrowsePage contract={contract} account={state.account} />;
+      case 'create':
+        return <CreatePage contract={contract} account={state.account} />;
+      case 'my-notes':
+        return <UserProfile addNotification={addNotification} />;
       case 'test':
-        return <ContractTestComponent />;
+        return (
+          <div>
+            <ContractTestComponent />
+            <CreateNoteTestComponent />
+          </div>
+        );
       case 'marketplace':
         return (
           <div>
@@ -399,8 +417,6 @@ function DemoApp() {
             <RecommendationEngine addNotification={addNotification} />
           </div>
         );
-      case 'create':
-        return <CreateNoteForm addNotification={addNotification} />;
       case 'ipfs':
         return (
           <div>
@@ -409,247 +425,30 @@ function DemoApp() {
             <IPFSFileManager addNotification={addNotification} />
           </div>
         );
-      case 'profile':
-        return <UserProfile addNotification={addNotification} />;
       case 'admin':
         return <AdminDashboard addNotification={addNotification} />;
-      case 'home':
       default:
-        return (
-          <div className="home-page">
-            <WalletConnection />
-            <ContractInfo />
-            
-            <div className="grid-2">
-              <CreateNoteDemo />
-              <PinataSetup />
-            </div>
-
-            <div className="card demo-instructions">
-              <h2 className="card-title">🎯 Demo Instructions</h2>
-              <div className="grid-3">
-                <div className="instruction-card">
-                  <h3 className="instruction-title">1️⃣ Connect</h3>
-                  <p className="instruction-text">Connect MetaMask and switch to localhost or testnet</p>
-                </div>
-                <div className="instruction-card">
-                  <h3 className="instruction-title">2️⃣ Create</h3>
-                  <p className="instruction-text">Create your first study note as an NFT</p>
-                </div>
-                <div className="instruction-card">
-                  <h3 className="instruction-title">3️⃣ Demo</h3>
-                  <p className="instruction-text">Perfect for hackathon presentations!</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Feature Showcase */}
-            <div className="features-showcase">
-              <h2 className="section-title">🚀 Platform Features</h2>
-              <div className="features-grid">
-                <div className="feature-card">
-                  <div className="feature-icon">🔐</div>
-                  <h3>Blockchain Security</h3>
-                  <p>Notes are secured as NFTs on the blockchain, ensuring true ownership and preventing fraud</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">💰</div>
-                  <h3>Fair Creator Economy</h3>
-                  <p>Creators earn directly from their work with transparent, automated payments</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">⭐</div>
-                  <h3>Quality Assurance</h3>
-                  <p>Community-driven rating system ensures high-quality educational content</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">🌐</div>
-                  <h3>Decentralized Storage</h3>
-                  <p>Files stored on IPFS for permanent, censorship-resistant access</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">🔍</div>
-                  <h3>Smart Search & Filter</h3>
-                  <p>Advanced filtering by subject, price, rating, difficulty, and file type with real-time suggestions</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">🤖</div>
-                  <h3>AI Recommendations</h3>
-                  <p>Personalized note recommendations based on your study patterns and purchase history</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">📁</div>
-                  <h3>IPFS File Manager</h3>
-                  <p>Decentralized file management with drag & drop uploads and ownership verification</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">📊</div>
-                  <h3>Analytics Dashboard</h3>
-                  <p>Track your performance, earnings, and note popularity with detailed analytics</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon">🔔</div>
-                  <h3>Real-time Notifications</h3>
-                  <p>Stay updated with sales, new reviews, recommendations, and platform updates</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Technology Stack */}
-            <div className="tech-stack">
-              <h3>🛠️ Built with Modern Web3 Technology</h3>
-              <div className="tech-grid">
-                <div className="tech-item">
-                  <span className="tech-icon">⚡</span>
-                  <span>React + TypeScript</span>
-                </div>
-                <div className="tech-item">
-                  <span className="tech-icon">🔗</span>
-                  <span>Ethereum & Polygon</span>
-                </div>
-                <div className="tech-item">
-                  <span className="tech-icon">📄</span>
-                  <span>Solidity Smart Contracts</span>
-                </div>
-                <div className="tech-item">
-                  <span className="tech-icon">🌐</span>
-                  <span>IPFS Storage</span>
-                </div>
-                <div className="tech-item">
-                  <span className="tech-icon">🦊</span>
-                  <span>MetaMask Integration</span>
-                </div>
-                <div className="tech-item">
-                  <span className="tech-icon">🛠️</span>
-                  <span>Hardhat Development</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Demo Instructions */}
-            <div className="demo-instructions">
-              <h3>🎮 Try the Advanced Features</h3>
-              <div className="instruction-steps">
-                <div className="step">
-                  <span className="step-number">1</span>
-                  <div className="step-content">
-                    <h4>🔍 Smart Search</h4>
-                    <p>Use advanced filters and real-time search suggestions in the Marketplace</p>
-                  </div>
-                </div>
-                <div className="step">
-                  <span className="step-number">2</span>
-                  <div className="step-content">
-                    <h4>🤖 AI Recommendations</h4>
-                    <p>Get personalized note recommendations based on your preferences</p>
-                  </div>
-                </div>
-                <div className="step">
-                  <span className="step-number">3</span>
-                  <div className="step-content">
-                    <h4>📁 IPFS Manager</h4>
-                    <p>Upload and manage your files with decentralized storage</p>
-                  </div>
-                </div>
-                <div className="step">
-                  <span className="step-number">4</span>
-                  <div className="step-content">
-                    <h4>📊 Track Analytics</h4>
-                    <p>Monitor your performance and earnings in the Profile section</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+        return <BrowsePage contract={contract} account={state.account} />;
     }
   };
 
   return (
     <div className="app">
-      <header className="header">
-        <div className="header-content">
-          <div className="logo" onClick={() => setCurrentPage('home')}>
-            <h1 className="main-title">🎓 Decentralized Notes Marketplace</h1>
-            <p className="main-subtitle">Buy, sell, and trade study notes as NFTs on the blockchain</p>
-          </div>
-          
-          <nav className="navigation">
-            {navigation.map(item => {
-              // Hide wallet-required items if not connected
-              if (item.requiresWallet && !state.isConnected) return null;
-              
-              // Hide admin-only items if not admin
-              if (item.adminOnly && !isAdmin) return null;
+      <Navigation
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        isConnected={state.isConnected}
+        onConnect={handleConnectWallet}
+      />
+      
+      <Layout>
+        {renderCurrentPage()}
+      </Layout>
 
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setCurrentPage(item.id)}
-                  className={`nav-button ${currentPage === item.id ? 'active' : ''}`}
-                  title={item.label}
-                >
-                  <span className="nav-icon">{item.icon}</span>
-                  <span className="nav-label">{item.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-
-          <div className="header-actions">
-            {state.isConnected && (
-              <div className="wallet-info">
-                <div className="wallet-address">
-                  👤 {state.account?.slice(0, 6)}...{state.account?.slice(-4)}
-                </div>
-                <div className="wallet-balance">
-                  💰 {parseFloat(state.balance).toFixed(4)} ETH
-                </div>
-              </div>
-            )}
-            <NotificationSystem 
-              notifications={notifications} 
-              onRemove={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
-            />
-          </div>
-        </div>
-      </header>
-
-      <main className="main-content">
-        <div className="container">
-          {renderCurrentPage()}
-        </div>
-      </main>
-
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h4>🎓 Marketplace</h4>
-            <div className="footer-links">
-              <button onClick={() => setCurrentPage('marketplace')} className="footer-link">Browse Notes</button>
-              <button onClick={() => setCurrentPage('create')} className="footer-link">Create Note</button>
-            </div>
-          </div>
-          <div className="footer-section">
-            <h4>🔗 Blockchain</h4>
-            <div className="footer-info">
-              <div>Contract: {process.env.REACT_APP_CONTRACT_ADDRESS?.slice(0, 10)}...</div>
-              <div>Network: {state.chainId === 1337 ? 'Localhost' : `Chain ${state.chainId}`}</div>
-            </div>
-          </div>
-          <div className="footer-section">
-            <h4>📊 Stats</h4>
-            <div className="footer-stats">
-              <div>✅ Secure & Decentralized</div>
-              <div>💰 Fair Creator Economy</div>
-              <div>⭐ Quality Assured</div>
-            </div>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>Built with ❤️ for the blockchain hackathon • Powered by Ethereum & IPFS</p>
-        </div>
-      </footer>
+      <NotificationSystem 
+        notifications={notifications} 
+        onRemove={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
+      />
     </div>
   );
 }
