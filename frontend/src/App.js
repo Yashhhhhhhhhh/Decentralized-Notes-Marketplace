@@ -11,11 +11,15 @@ import RecommendationEngine from './components/RecommendationEngine';
 import IPFSFileManager from './components/IPFSFileManager';
 import PinataDebugUploader from './components/PinataDebugUploader';
 import EnvTester from './components/EnvTester';
+import NetworkSelector from './components/NetworkSelector';
+import ContractTestComponent from './ContractTestComponent';
+import { getCurrentNetwork, getContractAddress } from './config/networks';
 import './App.css';
 
 // Demo Components
 function WalletConnection() {
   const { state, connectWallet, disconnectWallet } = useWeb3();
+  const currentNetwork = getCurrentNetwork();
 
   const getNetworkInfo = (chainId) => {
     switch (chainId) {
@@ -25,6 +29,8 @@ function WalletConnection() {
         return { name: 'Ethereum Mainnet', color: '#ef4444', emoji: '⚠️' };
       case 137:
         return { name: 'Polygon Mainnet', color: '#8b5cf6', emoji: '🔷' };
+      case 80001:
+        return { name: 'Polygon Mumbai', color: '#10b981', emoji: '🟣' };
       case 1337:
         return { name: 'Localhost', color: '#10b981', emoji: '🏠' };
       default:
@@ -33,7 +39,8 @@ function WalletConnection() {
   };
 
   const networkInfo = state.chainId ? getNetworkInfo(state.chainId) : null;
-  const isCorrectNetwork = state.chainId === 1337 || state.chainId === 11155111;
+  const isCorrectNetwork = state.chainId === currentNetwork.chainId;
+  const contractAddress = getContractAddress();
 
   return (
     <div className="card">
@@ -370,6 +377,7 @@ function DemoApp() {
 
   const navigation = [
     { id: 'home', label: '🏠 Home', icon: '🏠' },
+    { id: 'test', label: '🧪 Contract Test', icon: '🧪' },
     { id: 'marketplace', label: '🛒 Marketplace', icon: '🛒' },
     { id: 'create', label: '📝 Create Note', icon: '📝' },
     { id: 'ipfs', label: '📁 Files', icon: '📁' },
@@ -381,6 +389,8 @@ function DemoApp() {
 
   const renderCurrentPage = () => {
     switch (currentPage) {
+      case 'test':
+        return <ContractTestComponent />;
       case 'marketplace':
         return (
           <div>

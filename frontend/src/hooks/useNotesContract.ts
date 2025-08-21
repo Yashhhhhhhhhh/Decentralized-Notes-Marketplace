@@ -94,7 +94,7 @@ export function useNotesContract() {
       );
 
       // Add 20% buffer to gas estimate
-      const gasLimit = (gasEstimate * 120n) / 100n;
+      const gasLimit = (gasEstimate * BigInt(120)) / BigInt(100);
 
       const tx = await contractState.contract.createNote(
         title,
@@ -147,7 +147,7 @@ export function useNotesContract() {
         { value: priceInWei }
       );
 
-      const gasLimit = (gasEstimate * 120n) / 100n;
+      const gasLimit = (gasEstimate * BigInt(120)) / BigInt(100);
 
       const tx = await contractState.contract.purchaseNote(tokenId, {
         value: priceInWei,
@@ -187,7 +187,7 @@ export function useNotesContract() {
 
     try {
       const gasEstimate = await contractState.contract.rateNote.estimateGas(tokenId, rating);
-      const gasLimit = (gasEstimate * 120n) / 100n;
+      const gasLimit = (gasEstimate * BigInt(120)) / BigInt(100);
 
       const tx = await contractState.contract.rateNote(tokenId, rating, { gasLimit });
 

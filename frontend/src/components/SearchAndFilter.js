@@ -189,20 +189,51 @@ function SearchAndFilter() {
     return count;
   };
 
-  return {
-    searchTerm,
-    setSearchTerm,
-    filters,
-    handleFilterChange,
-    filteredNotes,
-    suggestions,
-    handleSuggestionClick,
-    clearFilters,
-    getFilterCount,
-    isLoading,
-    subjects,
-    sortOptions
-  };
+  return (
+    <div className="search-and-filter-container">
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        suggestions={suggestions}
+        handleSuggestionClick={handleSuggestionClick}
+      />
+      
+      <FilterPanel
+        filters={filters}
+        handleFilterChange={handleFilterChange}
+        subjects={subjects}
+        sortOptions={sortOptions}
+        clearFilters={clearFilters}
+        getFilterCount={getFilterCount}
+      />
+
+      <div className="search-results">
+        {isLoading ? (
+          <div className="loading-state">
+            <span>🔄 Loading notes...</span>
+          </div>
+        ) : (
+          <div className="results-summary">
+            Found {filteredNotes.length} notes
+            {getFilterCount() > 0 && ` with ${getFilterCount()} filter${getFilterCount() > 1 ? 's' : ''} applied`}
+          </div>
+        )}
+        
+        <div className="notes-grid">
+          {filteredNotes.map((note, index) => (
+            <div key={note.id || index} className="note-card">
+              <h3>{note.title}</h3>
+              <p>{note.description}</p>
+              <div className="note-meta">
+                <span className="note-subject">{note.subject}</span>
+                <span className="note-price">{note.price} ETH</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function SearchBar({ searchTerm, setSearchTerm, suggestions, handleSuggestionClick }) {
